@@ -35,8 +35,9 @@ object WsClientApp {
             val client = HttpClient(CIO).config { install(WebSockets) }
             client.ws(method = HttpMethod.Get, host = "127.0.0.1", port = 8080, path = "/myws/echo") {
                 send(Frame.Text("Hello World"))
-                for (message in incoming.map { it as? Frame.Text }.filterNotNull()) {
-                    println("Server said: " + message.readText())
+                incoming.consumeEach { frame ->
+                    val message = frame as? Frame.Text
+                    message?.let { println("Server said: " + it.readText()) }
                 }
             }
         }
