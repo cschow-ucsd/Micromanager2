@@ -1,4 +1,4 @@
-package project.ucsd.pages
+package project.ucsd.mm2.pages
 
 import kotlinx.html.*
 

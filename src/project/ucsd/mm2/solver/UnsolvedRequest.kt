@@ -1,4 +1,4 @@
-package project.ucsd.solver
+package project.ucsd.mm2.solver
 
 // TODO: create Event classes
 data class UnsolvedRequest(

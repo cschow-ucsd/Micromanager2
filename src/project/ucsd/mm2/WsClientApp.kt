@@ -1,4 +1,4 @@
-package project.ucsd
+package project.ucsd.mm2
 
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*

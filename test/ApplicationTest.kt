@@ -2,6 +2,7 @@ package project.ucsd
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import project.ucsd.mm2.module
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

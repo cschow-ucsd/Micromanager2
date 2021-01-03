@@ -52,4 +52,8 @@ dependencies {
     implementation "io.ktor:ktor-client-websockets:$ktor_version"
     implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
+
+    // graphql-kotlin
+    implementation "com.expediagroup:graphql-kotlin-schema-generator:$graphql_kotlin_version"
+    implementation "com.graphql-java:graphql-java:11.0"
 }

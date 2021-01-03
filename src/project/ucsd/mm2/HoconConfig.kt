@@ -1,4 +1,4 @@
-package project.ucsd
+package project.ucsd.mm2
 
 import com.typesafe.config.ConfigFactory
 import io.ktor.config.*

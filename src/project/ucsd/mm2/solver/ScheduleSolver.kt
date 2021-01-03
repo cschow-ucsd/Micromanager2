@@ -1,4 +1,4 @@
-package project.ucsd.solver
+package project.ucsd.mm2.solver
 
 object ScheduleSolver {
     fun solve(
