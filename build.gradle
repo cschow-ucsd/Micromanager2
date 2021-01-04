@@ -56,4 +56,7 @@ dependencies {
     // graphql-kotlin
     implementation "com.expediagroup:graphql-kotlin-schema-generator:$graphql_kotlin_version"
     implementation "com.graphql-java:graphql-java:11.0"
+
+    // dynamodb
+    implementation "com.amazonaws:aws-java-sdk-dynamodb:1.11.822"
 }

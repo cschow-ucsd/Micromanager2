@@ -13,7 +13,7 @@ import project.ucsd.mm2.graphql.schema.ScheduleMutationService
 import project.ucsd.mm2.graphql.schema.ScheduleQueryService
 
 fun Application.installGraphQL() {
-    val config = SchemaGeneratorConfig(listOf("project.ucsd.mm2.graphql"))
+    val config = SchemaGeneratorConfig(listOf("project.ucsd.mm2"))
     val queries = topLevelObjects(ScheduleQueryService())
     val mutations = topLevelObjects(ScheduleMutationService())
     val schema = toSchema(config, queries, mutations)
