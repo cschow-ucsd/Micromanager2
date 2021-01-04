@@ -44,18 +44,40 @@ private fun DynamoDB.createTable(
     log: Logger
 ): Table {
     log.info("Attempting to create DynamoDB table; please wait...")
-    val table = createTable(
-        tableName,
-        listOf(
-            KeySchemaElement("user_pk", KeyType.HASH), // Partition Key
-            KeySchemaElement("schedule_sk", KeyType.RANGE) // Sort Key
-        ),
-        listOf(
-            AttributeDefinition("user_pk", ScalarAttributeType.S),
-            AttributeDefinition("schedule_sk", ScalarAttributeType.S)
-        ),
-        ProvisionedThroughput(10L, 10L)
+
+    // primary key & attributes
+    val keySchema = listOf(
+        KeySchemaElement("user_pk", KeyType.HASH), // Partition Key
+        KeySchemaElement("schedule_sk", KeyType.RANGE) // Sort Key
     )
+    val attributeDefinitions = listOf(
+        AttributeDefinition("user_pk", ScalarAttributeType.S),
+        AttributeDefinition("schedule_sk", ScalarAttributeType.S),
+        AttributeDefinition("created_at", ScalarAttributeType.S)
+    )
+    val provisionedThroughput = ProvisionedThroughput(10L, 10L)
+
+    // local secondary index
+    val indexKeySchema = listOf(
+        KeySchemaElement("user_pk", KeyType.HASH), // Partition Key (secondary index)
+        KeySchemaElement("created_at", KeyType.RANGE) // Sort Key (secondary index)
+    )
+    val nonKeyAttributes = listOf<String>("name") // TODO: Add non-key attributes to be projected to secondary index
+    val projection = Projection().withProjectionType(ProjectionType.INCLUDE)
+        .withNonKeyAttributes(nonKeyAttributes)
+    val localSecondaryIndex = LocalSecondaryIndex()
+        .withIndexName("created_at_index")
+        .withKeySchema(indexKeySchema)
+        .withProjection(projection)
+
+    // create table request with primary key, attributes, & local secondary index
+    val createTableRequest = CreateTableRequest()
+        .withTableName(tableName)
+        .withProvisionedThroughput(provisionedThroughput)
+        .withAttributeDefinitions(attributeDefinitions)
+        .withKeySchema(keySchema)
+        .withLocalSecondaryIndexes(localSecondaryIndex)
+    val table = createTable(createTableRequest)
     table.waitForActive()
     log.info("Success. DynamoDB table status: ${table.description.tableStatus}")
     return table
