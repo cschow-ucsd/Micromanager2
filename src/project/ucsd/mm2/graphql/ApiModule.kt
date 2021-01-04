@@ -12,7 +12,7 @@ import io.ktor.routing.*
 import project.ucsd.mm2.graphql.schema.ScheduleMutationService
 import project.ucsd.mm2.graphql.schema.ScheduleQueryService
 
-fun Routing.routeGraphQL() {
+fun Application.installGraphQL() {
     val config = SchemaGeneratorConfig(listOf("project.ucsd.mm2.graphql"))
     val queries = topLevelObjects(ScheduleQueryService())
     val mutations = topLevelObjects(ScheduleMutationService())
@@ -31,12 +31,14 @@ fun Routing.routeGraphQL() {
         respond(output)
     }
 
-    route("/graphql") {
-        get {
-            call.executeQuery()
-        }
-        post {
-            call.executeQuery()
+    routing {
+        route("/graphql") {
+            get {
+                call.executeQuery()
+            }
+            post {
+                call.executeQuery()
+            }
         }
     }
 }
