@@ -93,7 +93,7 @@ private fun DynamoDB.createTable(
 }
 
 private fun Application.setupLocalDB() {
-    System.setProperty("sqlite4java.library.path", "native-libs")
+//    System.setProperty("sqlite4java.library.path", "native-libs")
     val port = HoconConfig.dbEndpoint.substringAfterLast(':')
     val server = ServerRunner.createServerFromCommandLineArgs(
         arrayOf("-inMemory", "-port", port)
