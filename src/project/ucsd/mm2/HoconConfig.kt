@@ -6,6 +6,8 @@ import io.ktor.config.*
 object HoconConfig : HoconApplicationConfig(ConfigFactory.load()) {
     operator fun get(key: String) = property(key).getString()
 
+    val testing = this["testing"].toBoolean()
+
     val schedulerWorkers = this["scheduler.workers"].toInt()
 
     val dbTableName = this["aws.dynamodb.table_name"]
