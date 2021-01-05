@@ -83,6 +83,11 @@ val copyNativeDeps by tasks.creating(Copy::class) {
     into("$buildDir/libs")
 }
 
+tasks.create<JavaExec>("localRun") {
+    classpath = sourceSets["main"].runtimeClasspath
+    main = "project.ucsd.mm2.AppLocalRun"
+}
+
 tasks.withType<JavaExec> {
     dependsOn.add(copyNativeDeps)
     doFirst { systemProperty("sqlite4java.library.path", "$buildDir/libs") }
