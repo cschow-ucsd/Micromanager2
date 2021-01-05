@@ -11,6 +11,12 @@ import project.ucsd.mm2.HoconConfig
 
 object DynamoDBModule {
     lateinit var scheduleTable: Table
+
+    // name constants
+    const val USER_PK = "user_pk"
+    const val ITEM_SK = "item_sk"
+    const val UPDATED_AT = "updated_at"
+    const val NAME = "name"
 }
 
 fun Application.installDynamoDB() {
@@ -45,30 +51,24 @@ private fun DynamoDB.createTable(
 ): Table {
     log.info("Attempting to create DynamoDB table; please wait...")
 
-    // name constants
-    val userPk = "user_pk"
-    val itemSk = "item_sk"
-    val updatedAt = "updated_at"
-    val name = "name"
-
     // primary key & attributes
     val keySchema = listOf(
-        KeySchemaElement(userPk, KeyType.HASH), // Partition Key
-        KeySchemaElement(itemSk, KeyType.RANGE) // Sort Key
+        KeySchemaElement(DynamoDBModule.USER_PK, KeyType.HASH), // Partition Key
+        KeySchemaElement(DynamoDBModule.ITEM_SK, KeyType.RANGE) // Sort Key
     )
     val attributeDefinitions = listOf(
-        AttributeDefinition(userPk, ScalarAttributeType.S),
-        AttributeDefinition(itemSk, ScalarAttributeType.S),
-        AttributeDefinition(updatedAt, ScalarAttributeType.S)
+        AttributeDefinition(DynamoDBModule.USER_PK, ScalarAttributeType.S),
+        AttributeDefinition(DynamoDBModule.ITEM_SK, ScalarAttributeType.S),
+        AttributeDefinition(DynamoDBModule.UPDATED_AT, ScalarAttributeType.S)
     )
     val provisionedThroughput = ProvisionedThroughput(10L, 10L)
 
     // local secondary index
     val indexKeySchema = listOf(
-        KeySchemaElement(userPk, KeyType.HASH), // Partition Key (secondary index)
-        KeySchemaElement(updatedAt, KeyType.RANGE) // Sort Key (secondary index)
+        KeySchemaElement(DynamoDBModule.USER_PK, KeyType.HASH), // Partition Key (secondary index)
+        KeySchemaElement(DynamoDBModule.UPDATED_AT, KeyType.RANGE) // Sort Key (secondary index)
     )
-    val nonKeyAttributes = listOf(name) // TODO: Add non-key attributes to be projected to secondary index
+    val nonKeyAttributes = listOf(DynamoDBModule.NAME) // TODO: Add non-key attributes to be projected to secondary index
     val projection = Projection().withProjectionType(ProjectionType.INCLUDE)
         .withNonKeyAttributes(nonKeyAttributes)
     val localSecondaryIndex = LocalSecondaryIndex()

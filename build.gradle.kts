@@ -74,6 +74,11 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
 
+tasks.create<JavaExec>("localRun") {
+    classpath = sourceSets["main"].runtimeClasspath
+    main = "project.ucsd.mm2.AppLocalRun"
+}
+
 val copyNativeDeps by tasks.creating(Copy::class) {
     from(configurations.runtimeClasspath) {
         include("*.dll")
@@ -81,11 +86,6 @@ val copyNativeDeps by tasks.creating(Copy::class) {
         include("*.so")
     }
     into("$buildDir/libs")
-}
-
-tasks.create<JavaExec>("localRun") {
-    classpath = sourceSets["main"].runtimeClasspath
-    main = "project.ucsd.mm2.AppLocalRun"
 }
 
 tasks.withType<JavaExec> {

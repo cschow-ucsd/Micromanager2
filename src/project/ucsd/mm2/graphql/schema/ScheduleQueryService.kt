@@ -6,7 +6,6 @@ import com.amazonaws.services.dynamodbv2.document.utils.ValueMap
 import project.ucsd.mm2.dynamodb.DynamoDBModule
 import project.ucsd.mm2.graphql.ApplicationCallContext
 import project.ucsd.mm2.graphql.schema.model.MmSchedule
-import project.ucsd.mm2.solver.SolveStatus
 
 class ScheduleQueryService {
 
@@ -17,11 +16,14 @@ class ScheduleQueryService {
     ): MmSchedule {
         val table = DynamoDBModule.scheduleTable
         val key = PrimaryKey()
-        key.addComponent("userPk", userId)
-        key.addComponent("itemSk", scheduleId)
+        key.addComponent(DynamoDBModule.USER_PK, userId)
+        key.addComponent(DynamoDBModule.ITEM_SK, scheduleId)
         val item = table.getItem(key)
-        return MmSchedule(updatedAt = item.getString("updatedAt"), name = item.getString("name"),
-            events = item.getList("events"))
+        return MmSchedule(
+            updatedAt = item.getString(DynamoDBModule.UPDATED_AT),
+            name = item.getString(DynamoDBModule.NAME),
+            events = item.getList("events")
+        )
     }
 
     fun schedules(
@@ -30,7 +32,7 @@ class ScheduleQueryService {
     ): List<MmSchedule> {
         val table = DynamoDBModule.scheduleTable
         val spec = QuerySpec()
-            .withKeyConditionExpression("userPk = :upk")
+            .withKeyConditionExpression("${DynamoDBModule.USER_PK} = :upk")
             .withValueMap(
                 ValueMap().withString(":upk", userId)
             )
@@ -38,10 +40,14 @@ class ScheduleQueryService {
         val items = table.query(spec)
         val iterator = items.iterator()
         val itemList = mutableListOf<MmSchedule>()
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             val item = iterator.next()
-            itemList.add(MmSchedule(updatedAt = item.getString("updatedAt"),
-                name = item.getString("name"), events = item.getList("events")))
+            itemList.add(
+                MmSchedule(
+                    updatedAt = item.getString(DynamoDBModule.UPDATED_AT),
+                    name = item.getString(DynamoDBModule.NAME), events = item.getList("events")
+                )
+            )
         }
         return itemList.toList()
     }
