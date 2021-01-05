@@ -22,7 +22,7 @@ class ScheduleQueryService {
         return MmSchedule(
             updatedAt = item.getString(DynamoDBModule.UPDATED_AT),
             name = item.getString(DynamoDBModule.NAME),
-            events = item.getList("events")
+            events = item.getList(DynamoDBModule.EVENTS)
         )
     }
 
@@ -45,7 +45,8 @@ class ScheduleQueryService {
             itemList.add(
                 MmSchedule(
                     updatedAt = item.getString(DynamoDBModule.UPDATED_AT),
-                    name = item.getString(DynamoDBModule.NAME), events = item.getList("events")
+                    name = item.getString(DynamoDBModule.NAME),
+                    events = item.getList(DynamoDBModule.EVENTS)
                 )
             )
         }

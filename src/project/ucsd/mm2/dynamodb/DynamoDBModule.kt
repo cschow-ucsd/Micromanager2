@@ -17,6 +17,7 @@ object DynamoDBModule {
     const val ITEM_SK = "item_sk"
     const val UPDATED_AT = "updated_at"
     const val NAME = "name"
+    const val EVENTS = "events"
 }
 
 fun Application.installDynamoDB() {
