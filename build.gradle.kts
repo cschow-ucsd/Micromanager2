@@ -87,3 +87,8 @@ tasks.withType<JavaExec> {
     dependsOn.add(copyNativeDeps)
     doFirst { systemProperty("sqlite4java.library.path", "$buildDir/libs") }
 }
+
+tasks.withType<Test> {
+    dependsOn.add(copyNativeDeps)
+    doFirst { systemProperty("sqlite4java.library.path", "$buildDir/libs") }
+}

@@ -11,4 +11,7 @@ object HoconConfig : HoconApplicationConfig(ConfigFactory.load()) {
     val dbTableName = this["aws.dynamodb.table_name"]
     val dbEndpoint = this["aws.dynamodb.endpoint"]
     val dbRegion = this["aws.dynamodb.region"]
+
+    val dbTestPort = this["aws.dynamodb.test_port"]
+    val dbTestRegion = this["aws.dynamodb.test_region"]
 }
