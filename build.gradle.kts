@@ -66,14 +66,6 @@ dependencies {
     // dynamodb
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.822")
     implementation("com.amazonaws:DynamoDBLocal:[1.12,2.0)")
-
-    // sqlite4java for DynamoDB Local
-//    implementation("com.almworks.sqlite4java:sqlite4java:1.0.392")
-//    implementation("com.almworks.sqlite4java:sqlite4java-win32-x86:1.0.392")
-//    implementation("com.almworks.sqlite4java:sqlite4java-win32-x64:1.0.392")
-//    implementation("com.almworks.sqlite4java:libsqlite4java-osx:1.0.392")
-//    implementation("com.almworks.sqlite4java:libsqlite4java-linux-i386:1.0.392")
-//    implementation("com.almworks.sqlite4java:libsqlite4java-linux-amd64:1.0.392")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
@@ -93,5 +85,5 @@ val copyNativeDeps by tasks.creating(Copy::class) {
 
 tasks.withType<JavaExec> {
     dependsOn.add(copyNativeDeps)
-    doFirst { systemProperty("java.library.path", "$buildDir/libs") }
+    doFirst { systemProperty("sqlite4java.library.path", "$buildDir/libs") }
 }

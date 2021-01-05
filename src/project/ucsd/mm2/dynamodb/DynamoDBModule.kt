@@ -4,7 +4,6 @@ import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.document.Table
-import com.amazonaws.services.dynamodbv2.local.main.ServerRunner
 import com.amazonaws.services.dynamodbv2.model.*
 import io.ktor.application.*
 import org.slf4j.Logger
@@ -15,8 +14,6 @@ object DynamoDBModule {
 }
 
 fun Application.installDynamoDB() {
-    if (HoconConfig.testing) setupLocalDB()
-
     val endpointConfig = AwsClientBuilder.EndpointConfiguration(HoconConfig.dbEndpoint, HoconConfig.dbRegion)
     val ddbClient = AmazonDynamoDBClientBuilder.standard()
         .withEndpointConfiguration(endpointConfig)
@@ -90,16 +87,4 @@ private fun DynamoDB.createTable(
     table.waitForActive()
     log.info("Success. DynamoDB table status: ${table.description.tableStatus}")
     return table
-}
-
-private fun Application.setupLocalDB() {
-//    System.setProperty("sqlite4java.library.path", "native-libs")
-    val port = HoconConfig.dbEndpoint.substringAfterLast(':')
-    val server = ServerRunner.createServerFromCommandLineArgs(
-        arrayOf("-inMemory", "-port", port)
-    )
-    server.start()
-    environment.monitor.subscribe(ApplicationStopped) {
-        server.stop()
-    }
 }
