@@ -11,22 +11,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationTest {
-    private lateinit var server: DynamoDBProxyServer
-
-    @BeforeTest
-    fun setupDB() {
-        server = AppLocalRun.setupLocalDB()
-        server.start()
-    }
-
-    @AfterTest
-    fun stopDB() {
-        server.stop()
-    }
-
     @Test
     fun testRoot() {
-        withTestApplication({ module() }) {
+        withTestApplication({ moduleWithLocalDB() }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
             }
